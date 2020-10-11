@@ -130,7 +130,7 @@ When there are changes on in the GitHub repository that you want reflected on yo
 
 **Now you are set up to work cooperatively on an assignment using GitHub. The remainder of this assignment consists of a simple coding and plotting exercise to practice collaborating with Github.**
 
-# Omitted Variable Bias Simulation (Group excercise)
+# Omitted Variable Bias Simulation (Group exercise)
 
 For this problem we are going to generate simulated data, with known characteristics, so that we can explore how the omission of a key variable biases our estimates.
 
@@ -190,11 +190,11 @@ The estimates for $\beta_1$ and $\beta_2$ are equal to 3.00 and 6.01.
 
 **Answer:**
 
-'''{r question2}
+```{r question2}
 ps1_reg2 <- lm(data=out, Y ~ V1)
 summary(ps1_reg2)
 
-'''
+```
 The estimate for $\beta_1$ is 7.81. 
 
 
