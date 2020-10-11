@@ -180,11 +180,14 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 ps1_reg1 <- lm(data=out, Y ~ V1+V2)
 summary(ps1_reg1)
 
+beta1 <- coef(ps1_reg1)[2]
 beta2 <- coef(ps1_reg1)[3]
+
 ```
 
 
-The estimates for $\beta_1$ and $\beta_2$ are equal to 3.00 and 6.01. 
+The estimates for $\beta_1$ and $\beta_2$ are not biased, as the estimates are normally distributed about their specified values (as can be seen from the method of data generation above). 
+
 
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
@@ -194,8 +197,11 @@ The estimates for $\beta_1$ and $\beta_2$ are equal to 3.00 and 6.01.
 ps1_reg2 <- lm(data=out, Y ~ V1)
 summary(ps1_reg2)
 
+beta1_OVB <- coef(ps1_reg1)[2]
+beta1_OVB
+
 ```
-The estimate for $\beta_1$ is 7.81. 
+The estimate for $\beta_1$ is biased because we have omitted the variable $V_2$ from this regression.  
 
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
@@ -210,7 +216,8 @@ ps1_reg2 <- lm(data=out, adjY ~ V1)
 summary(ps1_reg2)
 
 ```
-This value of beta is not biased. 
+This value of $\beta_1$ is not biased, because we have accounted for the effect of $V_2$ in our new dependent variable $adjY$ in this regression. 
+
 
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
 
