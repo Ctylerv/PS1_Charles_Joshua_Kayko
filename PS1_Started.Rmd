@@ -175,60 +175,38 @@ out$Y<-out$V1*B1+out$V2*B2+out$error
 **Question 1: Write a chunk in which you regress $Y$ on $V_1$ and $V_2$. Are your estimates of $\beta_1$ and $\beta_2$ biased?**
 
 **Answer:**
-```{r reg 1}
+```{r reg1}
 
 first_reg <- lm(out$Y ~ out$V1 + out$V2, out)
 summary(first_reg)
 
 ```
-
 The estimates for $\beta_1$ and $\beta_2$ are not biased, as the estimates are normally distributed about their specified values (as can be seen from the method of data generation above in the group exercise description). 
 
 
 **Question 2: Write a chunk in which you regress $Y$ on $V_1$ only. Is your estimate of $\beta_1$ biased?**
 
 **Answer:**
-```{r question2}
-ps1_reg2 <- lm(data=out, Y ~ V1)
-summary(ps1_reg2)
-
-beta1_OVB <- coef(ps1_reg1)[2]
-beta1_OVB
-
-```
-The estimate for $\beta_1$ is biased because we have omitted the variable $V_2$ from this regression.  
-
-```{r reg 2}
+```{r reg2}
 second_reg <- lm(Y ~ V1, out)
 summary(second_reg)
 
 ```
-Yes, $\beta_1$ is biased because we have omitted a statistically significant variable from this regression. 
+Yes, $\beta_1$ is biased because we have omitted the variable $V_2$ from this regression. 
 
 
 **Question 3: Generate a new variable $Y_{adj}$ such that $Y_{adj}=Y-\beta_2*V_2$. Then regress $Y_{adj}$ on $V_1$. Is your estimate of $\beta_1$ biased? Can you explain why/why not?**
 
 **Answer:**
-```{r reg 3}
-intermediate_value <- coef(first_reg)[3]*out$V2
-adjY <- out$Y - intermediate_value
-third_reg <- lm(adjY ~ out$V1)
-summary(third_reg)
+```{r reg3}
 
-#This variable is not biased, the population coefficient is within the 95% confidence interval of the estimated coefficient
-#the adjY variable makes the estimation of V1 more accurate.
+out$adjY <- out$Y - B2*out$V2
 
-```
-
-```{r question3}
-
-out$adjY <- out$Y - beta2*out$V2
-
-ps1_reg2 <- lm(data=out, adjY ~ V1)
+ps1_reg2 <- lm(adjY ~ V1, out)
 summary(ps1_reg2)
 
 ```
-This value of $\beta_1$ is not biased, because we have accounted for the effect of $V_2$ in our new dependent variable $adjY$ in this regression. 
+This estimated value of $\beta_1$, which is the same as what we found for the first regression, is not biased. This is because we have accounted for the effect of $V_2$ in our new dependent variable $adjY$. 
 
 
 **Question 4: The code below generates a scatter plot and regression line for the relationship between $V_1$ and $Y$ as well as $V_1$ and $Y_{adj}$. Submit an improved visualization of this data. Hint: you will need to delete the # to get the code to run **
@@ -253,36 +231,36 @@ The original plot is above. Our improved plot is below:
 library(ggpubr)
 
 p1 <- ggplot(out, aes(V1, y = value)) + 
-    geom_point(aes(y = Y, col = "Y"), alpha=0.4) + 
-    geom_point(aes(y = adjY, col = "adjY"), alpha=0.4)+ 
-    geom_smooth(method='lm', aes(y = Y, col = "Y"))+
-    geom_smooth(method='lm', aes(y = adjY, col = "adjY")) +
+  geom_point(aes(y = Y, col = "Y"), alpha=0.4) + 
+  geom_point(aes(y = adjY, col = "adjY"), alpha=0.4)+ 
+  geom_smooth(method='lm', aes(y = Y, col = "Y"), color = "#00205B") +
+  geom_smooth(method='lm', aes(y = adjY, col = "adjY"), color = "#B58500") +
 	scale_color_manual(values=c("#FFB81C", "#003594")) +
-	scale_y_continuous(limits=c(-35, 35)) +
+  scale_y_continuous(limits=c(-35, 35)) +
 	theme_classic() +
-	theme(
-		legend.position = c(0.2, 0.90),
-		legend.key = element_rect(fill = "white", color = "white"),
-		legend.text = element_text(size = 10),
-		legend.title = element_blank(),
-		axis.title = element_text(size = 12, face = "bold"),
-		axis.text = element_text(size = 10)
-		) +
-	guides(color=guide_legend(override.aes=list(fill=NA)))
+  theme(
+  	legend.position = c(0.15, 0.90),
+  	legend.key = element_rect(fill = "white", color = "black"),
+  	legend.text = element_text(size = 10),
+  	legend.title = element_blank(),
+  	axis.title = element_text(size = 12, face = "bold"),
+  	axis.text = element_text(size = 10)
+  ) +
+  guides(color=guide_legend(override.aes=list(fill=NA)))
 p2 <- ggplot(out, aes(x=Y)) + 
 	geom_density(color="#00205B", fill="#003594", alpha=0.6) + 
-	theme(axis.text.x = element_blank(),  axis.text.y = element_blank()) + 
-	scale_x_continuous(limits=c(-35, 35)) + 
-	scale_y_continuous(limits=c(0, 0.125)) +
+	scale_x_continuous(limits = c(-35, 35), position = "top") + 
+	scale_y_continuous(limits = c(0, 0.125)) +
 	coord_flip() +
-	theme_void()
+	theme_void() +
+	theme(axis.text.y = element_blank(), axis.text.x = element_text(color = "white", size = 20))
 p3 <- ggplot(out, aes(x=adjY)) + 
 	geom_density(color="#B58500", fill="#FFB81C", alpha=0.6) + 
-	theme(axis.text.x = element_blank(),  axis.text.y = element_blank()) + 
-	scale_x_continuous(limits=c(-35, 35)) + 
+	scale_x_continuous(limits=c(-35, 35), position = "top") + 
 	coord_flip() +
-	theme_void()
-improved <- ggarrange(p1, p2, p3, widths=c(4, 0.5, 0.5), ncol=3)
+	theme_void() +
+	theme(axis.text.y = element_blank(), axis.text.x = element_text(color = "white", size = 20))
+improved <- ggarrange(p1, p2, p3, widths=c(4, 0.5, 0.5), heights=c(4, 0.5, 0.5), ncol=3)
 annotate_figure(improved, top = text_grob("Omitted Variable Bias in Y vs. adjY", face = "bold", size = "14"))
 
 
