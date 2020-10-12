@@ -1,7 +1,7 @@
 ---
 title: 'Problem Set 1:Getting Started Key'
 author: "Claire Duquennois"
-date: "6/5/2020"
+date: "10/12/2020"
 output:
   word_document: default
   pdf_document: default
@@ -235,6 +235,7 @@ plotted
 The original plot is above. Our improved plot is below: 
 
 ```{r improved plot}
+# You'll need to install the ggpubr package before using. 
 library(ggpubr)
 
 p1 <- ggplot(out, aes(V1, y = value)) + 
@@ -267,7 +268,7 @@ p3 <- ggplot(out, aes(x=adjY)) +
 	scale_x_continuous(limits=c(-35, 35)) + 
 	coord_flip() +
 	theme_void()
-improved <- ggarrange(p1, p2, p3, widths=c(4, 0.5, 0.5), ncol=3)
+improved <- ggarrange(p1, p2, p3, widths=c(4, 0.5, 0.5), heights=c(3, 0.6, 0.6), ncol=3)
 annotate_figure(improved, top = text_grob("Omitted Variable Bias in Y vs. adjY", face = "bold", size = "14"))
 
 
