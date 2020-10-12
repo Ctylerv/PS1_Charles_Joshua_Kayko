@@ -3,9 +3,9 @@ title: 'Problem Set 1:Getting Started Key'
 author: "Claire Duquennois"
 date: "10/12/2020"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 ### Group Member 1: Charles
 ### Group Member 2: Kayko
-### Group Member 3: Joshua
+### Group Member 3: Josh
 
 
 
